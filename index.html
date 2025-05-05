@@ -43,46 +43,26 @@
     .word-item {
       margin: 0.5rem 0;
     }
-
-    /* Edit Toggle and Auth Styling */
-    #editToggle {
-      position: fixed;
+    #auth {
+      position: absolute;
       top: 10px;
       right: 10px;
-      background: darkred;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-      font-size: 0.9rem;
     }
-
-    #auth {
-      display: none;
-      position: fixed;
-      top: 50px;
-      right: 10px;
-      background: #111;
-      padding: 10px;
-      border: 1px solid red;
-      border-radius: 8px;
-      z-index: 999;
+    #editSection {
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
   <header>Draconic Conlang Dictionary</header>
-
-  <button id="editToggle" onclick="toggleAuth()">✎ Edit</button>
-  <div id="auth">
-    <input type="password" id="editPassword" placeholder="Enter edit password">
-    <button onclick="unlockEdit()">Unlock</button>
-  </div>
-
   <div class="container">
-    <div class="form" id="editSection" style="display:block;">
+    <div id="auth">
+      <button onclick="togglePasswordInput()">🔒</button>
+      <input type="password" id="editPassword" placeholder="Enter edit password" style="display:none;">
+      <button onclick="unlockEdit()" style="display:none;" id="unlockBtn">Unlock</button>
+    </div>
+
+    <div class="form" id="editSection" style="display:none;">
       <h2>Add Word</h2>
       <input id="conlangWord" placeholder="Conlang Word">
       <input id="englishWord" placeholder="English Translation">
@@ -134,34 +114,35 @@
     </div>
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js"></script>
+  <!-- Firebase SDK (Compat Version) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script>
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyC81DB6fOMtulZJc8FHXF0vqAc66ciTSPQ",
       authDomain: "draconic-dictionarry.firebaseapp.com",
-      databaseURL: "https://draconic-dictionarry-default-rtdb.firebaseio.com",
+      databaseURL: "https://draconic-dictionarry-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "draconic-dictionarry",
-      storageBucket: "draconic-dictionarry.appspot.com",
+      storageBucket: "draconic-dictionarry.firebasestorage.app",
       messagingSenderId: "182070316296",
-      appId: "1:182070316296:web:2f0a1d2bb474a143e670bd"
+      appId: "1:182070316296:web:f872bd47ab2c1623e670bd"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const PASSWORD = "omega";
 
-    function toggleAuth() {
-      const authBox = document.getElementById("auth");
-      authBox.style.display = authBox.style.display === "none" ? "block" : "none";
+    function togglePasswordInput() {
+      document.getElementById("editPassword").style.display = "inline";
+      document.getElementById("unlockBtn").style.display = "inline";
     }
 
     function unlockEdit() {
       const pw = document.getElementById("editPassword").value;
       if (pw === PASSWORD) {
         document.getElementById("editSection").style.display = "block";
-        document.getElementById("auth").style.display = "none";
       } else {
         alert("Incorrect password");
       }
