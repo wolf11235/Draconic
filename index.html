@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conlang Word List & Translator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1, h2 { text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input, select, button {
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Conlang Word List & Translator</h1>
+  <h2>Translator</h2>
+  <label for="translateWord">Word to Translate:</label>
+  <input type="text" id="translateWord" placeholder="Type a word" />
+  <label>
+    <input type="radio" name="direction" value="conlangToEnglish" checked />
+    Conlang → English
+  </label>
+  <label>
+    <input type="radio" name="direction" value="englishToConlang" />
+    English → Conlang
+  </label>
+  <button onclick="translateWord()">Translate</button>
+  <p id="translationResult"></p>
+
+  <div id="unlockEditor">
+    <label for="editPassword">Enter Edit Key:</label>
+    <input type="password" id="editPassword" />
+    <button onclick="unlockEdit()">Unlock</button>
+  </div>
+
+  <div id="editSection" style="display:none;">
+    <h2>Add New Word</h2>
+    <label for="category">Category:</label>
+    <select id="category">
+      <option value="Animals">Animals</option>
+      <option value="Verbs">Verbs</option>
+      <option value="Food">Food</option>
+      <option value="Nature">Nature</option>
+      <option value="Other">Other</option>
+    </select>
+    <label for="conlang">Conlang Word:</label>
+    <input type="text" id="conlang" />
+    <label for="english">English Word:</label>
+    <input type="text" id="english" />
+    <button onclick="addWord()">Add Word</button>
+  </div>
+
+  <h2>Word List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Conlang Word</th>
+        <th>English Word</th>
+      </tr>
+    </thead>
+    <tbody id="wordTableBody"></tbody>
+  </table>
+
+  <script>
+    function addWord() {
+      const conlangWord = document.getElementById('conlang').value.trim();
+      const englishWord = document.getElementById('english').value.trim();
+      const category = document.getElementById('category').value;
+      if (conlangWord && englishWord) {
+        const wordData = { conlangWord, englishWord, category };
+        let words = JSON.parse(localStorage.getItem('wordList')) || [];
+        words.push(wordData);
+        words.sort((a, b) => a.conlangWord.localeCompare(b.conlangWord));
+        localStorage.setItem('wordList', JSON.stringify(words));
+        document.getElementById('conlang').value = '';
+        document.getElementById('english').value = '';
+        displayWords();
+      } else {
+        alert("Please fill in both fields.");
+      }
+    }
+
+    function displayWords() {
+      const words = JSON.parse(localStorage.getItem('wordList')) || [];
+      const tableBody = document.getElementById('wordTableBody');
+      tableBody.innerHTML = '';
+      for (const word of words) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${word.category}</td><td>${word.conlangWord}</td><td>${word.englishWord}</td>`;
+        tableBody.appendChild(row);
+      }
+    }
+
+    function translateWord() {
+      const input = document.getElementById('translateWord').value.trim().toLowerCase();
+      const direction = document.querySelector('input[name="direction"]:checked').value;
+      const words = JSON.parse(localStorage.getItem('wordList')) || [];
+      let result = "";
+      if (direction === 'conlangToEnglish') {
+        const match = words.find(word => word.conlangWord.toLowerCase() === input);
+        result = match ? `English: ${match.englishWord}` : "No match found.";
+      } else {
+        const match = words.find(word => word.englishWord.toLowerCase() === input);
+        result = match ? `Conlang: ${match.conlangWord}` : "No match found.";
+      }
+      document.getElementById('translationResult').innerText = result;
+    }
+
+    function unlockEdit() {
+      const key = document.getElementById('editPassword').value;
+      if (key === 'mySecret123') {
+        document.getElementById('editSection').style.display = 'block';
+        document.getElementById('unlockEditor').style.display = 'none';
+      } else {
+        alert('Incorrect key.');
+      }
+    }
+
+    window.onload = displayWords;
+  </script>
+</body>
+</html>
