@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Draconic Conlang Dictionary</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Cinzel', serif;
@@ -13,7 +14,6 @@
       max-width: 1000px;
       margin: auto;
       padding: 20px;
-      position: relative;
     }
     h1, h2 {
       color: #ff3c00;
@@ -88,15 +88,12 @@
     <input type="password" id="editPassword" placeholder="Enter key">
     <button onclick="unlockEdit()">Unlock</button>
   </div>
-
   <h1>Draconic Conlang Dictionary & Translator</h1>
-
   <h2>Translator</h2>
   <label for="translateInput">Word to Translate:</label>
   <input type="text" id="translateInput" placeholder="Type a word">
   <button onclick="translateWord()">Translate</button>
   <p id="translationResult" style="font-family: serif;"></p>
-
   <div id="editSection" style="display:none;">
     <h2>Add New Word</h2>
     <label for="categories">Categories:</label>
@@ -138,7 +135,6 @@
     <input type="text" id="englishWord">
     <button onclick="addWord()">Add Word</button>
   </div>
-
   <h2>Word List</h2>
   <table>
     <thead>
@@ -151,8 +147,6 @@
     </thead>
     <tbody id="wordTableBody"></tbody>
   </table>
-
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js"></script>
   <script>
@@ -167,26 +161,23 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     const PASSWORD = "omega";
     let isUnlocked = false;
-
     function toggleKeyEntry() {
       const entry = document.getElementById('keyEntry');
       entry.style.display = entry.style.display === 'block' ? 'none' : 'block';
     }
-
     function unlockEdit() {
       const key = document.getElementById('editPassword').value;
       if (key === PASSWORD) {
         isUnlocked = true;
         document.getElementById('editSection').style.display = 'block';
         document.getElementById('keyEntry').style.display = 'none';
+        loadWords();
       } else {
         alert('Incorrect password.');
       }
     }
-
     function addWord() {
       const word = document.getElementById('conlangWord').value.trim();
       const english = document.getElementById('englishWord').value.trim();
@@ -196,7 +187,6 @@
       document.getElementById("conlangWord").value = "";
       document.getElementById("englishWord").value = "";
     }
-
     function loadWords() {
       db.ref("words").on("value", (snapshot) => {
         const data = snapshot.val();
@@ -217,12 +207,10 @@
         }
       });
     }
-
     function deleteWord(id) {
       const pw = prompt("Enter password to delete:");
       if (pw === PASSWORD) db.ref("words/" + id).remove();
     }
-
     function translateWord() {
       const input = document.getElementById("translateInput").value.trim().toLowerCase();
       db.ref("words").once("value", (snapshot) => {
@@ -237,7 +225,6 @@
         document.getElementById("translationResult").innerText = result;
       });
     }
-
     window.onload = loadWords;
   </script>
 </body>
