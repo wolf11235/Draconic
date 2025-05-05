@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Draconic Conlang Tool</title>
+  <title>Draconic Conlang Dictionary</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
   <style>
     body {
@@ -60,54 +60,46 @@
     td {
       background-color: #111;
     }
-    #lockIcon {
+    #lockButton {
       position: absolute;
       top: 10px;
       right: 10px;
-      background: none;
+      background: transparent;
       border: none;
-      font-size: 1.5rem;
       color: #ff3c00;
+      font-size: 24px;
       cursor: pointer;
     }
-    #unlockEditor {
+    #keyEntry {
       display: none;
       position: absolute;
       top: 50px;
       right: 10px;
-      background-color: #111;
-      padding: 10px;
+      background: #111;
       border: 1px solid #ff3c00;
+      padding: 10px;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
-  <button id="lockIcon" onclick="toggleUnlockBox()">🔒</button>
-  <div id="unlockEditor">
-    <label for="editPassword">Enter Edit Key:</label>
-    <input type="password" id="editPassword" />
+  <button id="lockButton" onclick="toggleKeyEntry()">🔒</button>
+  <div id="keyEntry">
+    <input type="password" id="editPassword" placeholder="Enter key">
     <button onclick="unlockEdit()">Unlock</button>
   </div>
 
   <h1>Draconic Conlang Dictionary & Translator</h1>
 
   <h2>Translator</h2>
-  <label for="translateWord">Word to Translate:</label>
-  <input type="text" id="translateWord" placeholder="Type a word" />
-  <label>
-    <input type="radio" name="direction" value="conlangToEnglish" checked />
-    Conlang → English
-  </label>
-  <label>
-    <input type="radio" name="direction" value="englishToConlang" />
-    English → Conlang
-  </label>
+  <label for="translateInput">Word to Translate:</label>
+  <input type="text" id="translateInput" placeholder="Type a word">
   <button onclick="translateWord()">Translate</button>
-  <p id="translationResult"></p>
+  <p id="translationResult" style="font-family: serif;"></p>
 
   <div id="editSection" style="display:none;">
     <h2>Add New Word</h2>
-    <label for="categories">Categories (hold Ctrl or Cmd to select multiple):</label>
+    <label for="categories">Categories:</label>
     <select id="categories" multiple>
       <option>Pronouns</option>
       <option>Verbs</option>
@@ -124,7 +116,6 @@
       <option>Weapons & Tools</option>
       <option>Magic & Power</option>
       <option>Emotion & Spirit</option>
-      <option>Nature & Environment</option>
       <option>Terrain</option>
       <option>Weather</option>
       <option>Water</option>
@@ -141,10 +132,10 @@
       <option>Titles & Ranks</option>
       <option>Technology</option>
     </select>
-    <label for="conlang">Conlang Word:</label>
-    <input type="text" id="conlang" />
-    <label for="english">English Word:</label>
-    <input type="text" id="english" />
+    <label for="conlangWord">Conlang Word:</label>
+    <input type="text" id="conlangWord">
+    <label for="englishWord">English Word:</label>
+    <input type="text" id="englishWord">
     <button onclick="addWord()">Add Word</button>
   </div>
 
@@ -161,85 +152,93 @@
     <tbody id="wordTableBody"></tbody>
   </table>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js"></script>
   <script>
-    let isEditor = false;
+    const firebaseConfig = {
+      apiKey: "AIzaSyC81DB6fOMtulZJc8FHXF0vqAc66ciTSPQ",
+      authDomain: "draconic-dictionarry.firebaseapp.com",
+      databaseURL: "https://draconic-dictionarry-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "draconic-dictionarry",
+      storageBucket: "draconic-dictionarry.appspot.com",
+      messagingSenderId: "182070316296",
+      appId: "1:182070316296:web:f872bd47ab2c1623e670bd"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    function toggleUnlockBox() {
-      const unlockBox = document.getElementById('unlockEditor');
-      unlockBox.style.display = (unlockBox.style.display === 'none' || unlockBox.style.display === '') ? 'block' : 'none';
+    const PASSWORD = "omega";
+    let isUnlocked = false;
+
+    function toggleKeyEntry() {
+      const entry = document.getElementById('keyEntry');
+      entry.style.display = entry.style.display === 'block' ? 'none' : 'block';
     }
 
     function unlockEdit() {
       const key = document.getElementById('editPassword').value;
-      if (key === 'omega') {
-        isEditor = true;
+      if (key === PASSWORD) {
+        isUnlocked = true;
         document.getElementById('editSection').style.display = 'block';
-        document.getElementById('unlockEditor').style.display = 'none';
-        displayWords();
+        document.getElementById('keyEntry').style.display = 'none';
       } else {
-        alert('Incorrect key.');
+        alert('Incorrect password.');
       }
     }
 
     function addWord() {
-      const conlangWord = document.getElementById('conlang').value.trim();
-      const englishWord = document.getElementById('english').value.trim();
-      const categoriesSelect = document.getElementById('categories');
-      const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(option => option.value);
-      if (conlangWord && englishWord && selectedCategories.length > 0) {
-        const wordData = { conlangWord, englishWord, categories: selectedCategories };
-        let words = JSON.parse(localStorage.getItem('wordList')) || [];
-        words.push(wordData);
-        words.sort((a, b) => a.conlangWord.localeCompare(b.conlangWord));
-        localStorage.setItem('wordList', JSON.stringify(words));
-        document.getElementById('conlang').value = '';
-        document.getElementById('english').value = '';
-        displayWords();
-      } else {
-        alert("Please fill in all fields and select at least one category.");
-      }
+      const word = document.getElementById('conlangWord').value.trim();
+      const english = document.getElementById('englishWord').value.trim();
+      const cats = Array.from(document.getElementById('categories').selectedOptions).map(opt => opt.value);
+      if (!word || !english || cats.length === 0) return alert("Please fill all fields.");
+      db.ref("words").push({ conlang: word, english, categories: cats });
+      document.getElementById("conlangWord").value = "";
+      document.getElementById("englishWord").value = "";
     }
 
-    function deleteWord(wordToDelete) {
-      let words = JSON.parse(localStorage.getItem('wordList')) || [];
-      words = words.filter(word => word.conlangWord !== wordToDelete);
-      localStorage.setItem('wordList', JSON.stringify(words));
-      displayWords();
+    function loadWords() {
+      db.ref("words").on("value", (snapshot) => {
+        const data = snapshot.val();
+        const tableBody = document.getElementById("wordTableBody");
+        tableBody.innerHTML = "";
+        if (!data) return;
+        const words = Object.entries(data).map(([id, val]) => ({ id, ...val }));
+        words.sort((a, b) => a.conlang.localeCompare(b.conlang));
+        for (const word of words) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${word.categories.join(", ")}</td>
+            <td style="font-family: 'UnifrakturCook', cursive;">${word.conlang}</td>
+            <td>${word.english}</td>
+            <td>${isUnlocked ? `<button onclick="deleteWord('${word.id}')">Delete</button>` : ''}</td>
+          `;
+          tableBody.appendChild(row);
+        }
+      });
     }
 
-    function displayWords() {
-      const words = JSON.parse(localStorage.getItem('wordList')) || [];
-      const tableBody = document.getElementById('wordTableBody');
-      tableBody.innerHTML = '';
-      for (const word of words) {
-        const row = document.createElement('tr');
-        const categoryText = word.categories ? word.categories.join(', ') : word.category;
-        row.innerHTML = `
-          <td>${categoryText}</td>
-          <td>${word.conlangWord}</td>
-          <td>${word.englishWord}</td>
-          <td>${isEditor ? `<button onclick="deleteWord('${word.conlangWord}')">Delete</button>` : ''}</td>
-        `;
-        tableBody.appendChild(row);
-      }
+    function deleteWord(id) {
+      const pw = prompt("Enter password to delete:");
+      if (pw === PASSWORD) db.ref("words/" + id).remove();
     }
 
     function translateWord() {
-      const input = document.getElementById('translateWord').value.trim().toLowerCase();
-      const direction = document.querySelector('input[name="direction"]:checked').value;
-      const words = JSON.parse(localStorage.getItem('wordList')) || [];
-      let result = "";
-      if (direction === 'conlangToEnglish') {
-        const match = words.find(word => word.conlangWord.toLowerCase() === input);
-        result = match ? `English: ${match.englishWord}` : "No match found.";
-      } else {
-        const match = words.find(word => word.englishWord.toLowerCase() === input);
-        result = match ? `Conlang: ${match.conlangWord}` : "No match found.";
-      }
-      document.getElementById('translationResult').innerText = result;
+      const input = document.getElementById("translateInput").value.trim().toLowerCase();
+      db.ref("words").once("value", (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+        let result = "Not found.";
+        Object.values(data).forEach(w => {
+          if (w.conlang.toLowerCase() === input || w.english.toLowerCase() === input) {
+            result = `${w.conlang} = ${w.english}`;
+          }
+        });
+        document.getElementById("translationResult").innerText = result;
+      });
     }
 
-    window.onload = displayWords;
+    window.onload = loadWords;
   </script>
 </body>
 </html>
