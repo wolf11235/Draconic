@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Draconic Conlang Dictionary</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body {
       font-family: 'Cinzel', serif;
@@ -14,6 +14,7 @@
       max-width: 1000px;
       margin: auto;
       padding: 20px;
+      position: relative;
     }
     h1, h2 {
       color: #ff3c00;
@@ -61,7 +62,7 @@
       background-color: #111;
     }
     #lockButton {
-      position: absolute;
+      position: fixed;
       top: 10px;
       right: 10px;
       background: transparent;
@@ -69,31 +70,44 @@
       color: #ff3c00;
       font-size: 24px;
       cursor: pointer;
+      z-index: 1000;
+      line-height: 1;
+      padding: 0;
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     #keyEntry {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 50px;
       right: 10px;
       background: #111;
       border: 1px solid #ff3c00;
       padding: 10px;
       border-radius: 5px;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
-  <button id="lockButton" onclick="toggleKeyEntry()">🔒</button>
+  <button id="lockButton" onclick="toggleKeyEntry()"><i class="fas fa-lock"></i></button>
   <div id="keyEntry">
     <input type="password" id="editPassword" placeholder="Enter key">
     <button onclick="unlockEdit()">Unlock</button>
   </div>
+
   <h1>Draconic Conlang Dictionary & Translator</h1>
+
   <h2>Translator</h2>
   <label for="translateInput">Word to Translate:</label>
   <input type="text" id="translateInput" placeholder="Type a word">
   <button onclick="translateWord()">Translate</button>
   <p id="translationResult" style="font-family: serif;"></p>
+
   <div id="editSection" style="display:none;">
     <h2>Add New Word</h2>
     <label for="categories">Categories:</label>
@@ -135,6 +149,7 @@
     <input type="text" id="englishWord">
     <button onclick="addWord()">Add Word</button>
   </div>
+
   <h2>Word List</h2>
   <table>
     <thead>
@@ -147,8 +162,10 @@
     </thead>
     <tbody id="wordTableBody"></tbody>
   </table>
-  <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyC81DB6fOMtulZJc8FHXF0vqAc66ciTSPQ",
@@ -161,23 +178,26 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
     const PASSWORD = "omega";
     let isUnlocked = false;
+
     function toggleKeyEntry() {
       const entry = document.getElementById('keyEntry');
       entry.style.display = entry.style.display === 'block' ? 'none' : 'block';
     }
+
     function unlockEdit() {
       const key = document.getElementById('editPassword').value;
       if (key === PASSWORD) {
         isUnlocked = true;
         document.getElementById('editSection').style.display = 'block';
         document.getElementById('keyEntry').style.display = 'none';
-        loadWords();
       } else {
         alert('Incorrect password.');
       }
     }
+
     function addWord() {
       const word = document.getElementById('conlangWord').value.trim();
       const english = document.getElementById('englishWord').value.trim();
@@ -187,6 +207,7 @@
       document.getElementById("conlangWord").value = "";
       document.getElementById("englishWord").value = "";
     }
+
     function loadWords() {
       db.ref("words").on("value", (snapshot) => {
         const data = snapshot.val();
@@ -199,7 +220,7 @@
           const row = document.createElement('tr');
           row.innerHTML = `
             <td>${word.categories.join(", ")}</td>
-            <td style="font-family: 'UnifrakturCook', cursive;">${word.conlang}</td>
+            <td>${word.conlang}</td>
             <td>${word.english}</td>
             <td>${isUnlocked ? `<button onclick="deleteWord('${word.id}')">Delete</button>` : ''}</td>
           `;
@@ -207,10 +228,12 @@
         }
       });
     }
+
     function deleteWord(id) {
       const pw = prompt("Enter password to delete:");
       if (pw === PASSWORD) db.ref("words/" + id).remove();
     }
+
     function translateWord() {
       const input = document.getElementById("translateInput").value.trim().toLowerCase();
       db.ref("words").once("value", (snapshot) => {
@@ -225,6 +248,7 @@
         document.getElementById("translationResult").innerText = result;
       });
     }
+
     window.onload = loadWords;
   </script>
 </body>
