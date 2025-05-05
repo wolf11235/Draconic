@@ -34,6 +34,7 @@
       margin: 0.25rem;
       border-radius: 5px;
       border: none;
+      font-family: inherit;
     }
     button {
       background: darkred;
@@ -42,14 +43,16 @@
     }
     .word-item {
       margin: 0.5rem 0;
+      font-family: sans-serif; /* Normal font for saved entries */
     }
     #auth {
       position: absolute;
       top: 10px;
       right: 10px;
     }
-    #editSection {
-      margin-top: 2rem;
+    #passwordControls {
+      display: none;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
@@ -58,8 +61,10 @@
   <div class="container">
     <div id="auth">
       <button onclick="togglePasswordInput()">🔒</button>
-      <input type="password" id="editPassword" placeholder="Enter edit password" style="display:none;">
-      <button onclick="unlockEdit()" style="display:none;" id="unlockBtn">Unlock</button>
+      <div id="passwordControls">
+        <input type="password" id="editPassword" placeholder="Enter edit password">
+        <button onclick="unlockEdit()">Unlock</button>
+      </div>
     </div>
 
     <div class="form" id="editSection" style="display:none;">
@@ -114,7 +119,7 @@
     </div>
   </div>
 
-  <!-- Firebase SDK (Compat Version) -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script>
@@ -133,10 +138,11 @@
     const db = firebase.database();
 
     const PASSWORD = "omega";
+    let passwordVisible = false;
 
     function togglePasswordInput() {
-      document.getElementById("editPassword").style.display = "inline";
-      document.getElementById("unlockBtn").style.display = "inline";
+      passwordVisible = !passwordVisible;
+      document.getElementById("passwordControls").style.display = passwordVisible ? "block" : "none";
     }
 
     function unlockEdit() {
