@@ -1,3 +1,4 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove, get } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
@@ -16,73 +17,61 @@ const db = getDatabase(app);
 
 const PASSWORD = "omega";
 
-let showAuth = false;
-function toggleAuth() {
-  showAuth = !showAuth;
-  document.getElementById("auth").style.display = showAuth ? "block" : "none";
-}
-window.toggleAuth = toggleAuth;
+document.getElementById("toggleLock").addEventListener("click", () => {
+  const input = document.getElementById("editPassword");
+  input.style.display = input.style.display === "none" ? "block" : "none";
+});
 
-function unlockEdit() {
-  const pw = document.getElementById("editPassword").value;
-  if (pw === PASSWORD) {
+document.getElementById("editPassword").addEventListener("change", () => {
+  if (document.getElementById("editPassword").value === PASSWORD) {
     document.getElementById("editSection").style.display = "block";
   } else {
-    alert("Incorrect password");
+    alert("Incorrect password.");
   }
-}
-window.unlockEdit = unlockEdit;
+});
 
-function addWord() {
-  const word = document.getElementById("conlangWord").value.trim();
+window.addWord = () => {
+  const conlang = document.getElementById("conlangWord").value.trim();
   const english = document.getElementById("englishWord").value.trim();
-  const cats = Array.from(document.getElementById("categories").selectedOptions).map(opt => opt.value);
-  if (!word || !english || cats.length === 0) return;
-  push(ref(db, "words"), { conlang: word, english, categories: cats });
+  const categories = Array.from(document.getElementById("categories").selectedOptions).map(opt => opt.value);
+  if (!conlang || !english || categories.length === 0) return;
+  push(ref(db, "words"), { conlang, english, categories });
   document.getElementById("conlangWord").value = "";
   document.getElementById("englishWord").value = "";
-}
-window.addWord = addWord;
+};
+
+window.translateWord = () => {
+  const input = document.getElementById("translateWord").value.trim().toLowerCase();
+  const dir = document.querySelector("input[name='direction']:checked").value;
+  get(ref(db, "words")).then(snapshot => {
+    const data = snapshot.val();
+    let result = "Not found.";
+    for (const id in data) {
+      const word = data[id];
+      if ((dir === "conlangToEnglish" && word.conlang.toLowerCase() === input) ||
+          (dir === "englishToConlang" && word.english.toLowerCase() === input)) {
+        result = `${word.conlang} = ${word.english}`;
+        break;
+      }
+    }
+    document.getElementById("translationResult").innerText = result;
+  });
+};
 
 function loadWords() {
-  const wordList = document.getElementById("wordList");
-  onValue(ref(db, "words"), (snapshot) => {
+  onValue(ref(db, "words"), snapshot => {
     const data = snapshot.val();
-    wordList.innerHTML = "";
+    const container = document.getElementById("wordList");
+    container.innerHTML = "";
     if (!data) return;
     const words = Object.entries(data).map(([id, val]) => ({ id, ...val }));
     words.sort((a, b) => a.conlang.localeCompare(b.conlang));
     for (const word of words) {
-      const item = document.createElement("div");
-      item.className = "word-item";
-      item.innerHTML = `<strong>${word.conlang}</strong> (${word.english}) [${word.categories.join(", ")}]
-        <button onclick="deleteWord('${word.id}')">❌</button>`;
-      wordList.appendChild(item);
+      const div = document.createElement("div");
+      div.innerText = `${word.conlang} (${word.english}) - ${word.categories.join(", ")}`;
+      container.appendChild(div);
     }
   });
 }
-window.deleteWord = function(id) {
-  const pw = prompt("Enter password to delete:");
-  if (pw === PASSWORD) {
-    remove(ref(db, "words/" + id));
-  }
-};
-
-function translateWord() {
-  const input = document.getElementById("translateInput").value.trim().toLowerCase();
-  get(ref(db, "words")).then(snapshot => {
-    const data = snapshot.val();
-    let result = "Not found.";
-    if (data) {
-      Object.values(data).forEach(w => {
-        if (w.conlang.toLowerCase() === input || w.english.toLowerCase() === input) {
-          result = `${w.conlang} = ${w.english}`;
-        }
-      });
-    }
-    document.getElementById("translationResult").innerText = result;
-  });
-}
-window.translateWord = translateWord;
 
 loadWords();

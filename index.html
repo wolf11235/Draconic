@@ -1,72 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Draconic Conlang Dictionary</title>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Draconic Conlang Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>Draconic Conlang Dictionary</header>
-  <div class="container">
-    <div id="auth-toggle" onclick="toggleAuth()" title="Unlock to edit">🔒</div>
-    <div id="auth" style="display:none;">
-      <input type="password" id="editPassword" placeholder="Enter edit password">
-      <button onclick="unlockEdit()">Unlock Edit</button>
-    </div>
-
-    <div class="form" id="editSection" style="display:none;">
-      <h2>Add Word</h2>
-      <input id="conlangWord" placeholder="Conlang Word">
-      <input id="englishWord" placeholder="English Translation">
-      <select id="categories" multiple>
-        <option>Pronouns</option>
-        <option>Verbs</option>
-        <option>Adjectives</option>
-        <option>Adverbs</option>
-        <option>Conjunctions</option>
-        <option>Prepositions / Locatives</option>
-        <option>Interrogatives</option>
-        <option>Demonstratives</option>
-        <option>Negation Words</option>
-        <option>Quantifiers</option>
-        <option>People & Kinship</option>
-        <option>Body & Senses</option>
-        <option>Weapons & Tools</option>
-        <option>Magic & Power</option>
-        <option>Emotion & Spirit</option>
-        <option>Terrain</option>
-        <option>Weather</option>
-        <option>Water</option>
-        <option>Animals & Creatures</option>
-        <option>Food & Drink</option>
-        <option>Time</option>
-        <option>Numbers</option>
-        <option>Places</option>
-        <option>Abstract Concepts</option>
-        <option>Conversation Phrases</option>
-        <option>Mythology / Religion</option>
-        <option>Combat Terminology</option>
-        <option>Crafting / Smithing</option>
-        <option>Titles & Ranks</option>
-        <option>Technology</option>
-      </select>
-      <button onclick="addWord()">Add Word</button>
-    </div>
-
-    <div class="dictionary">
-      <h2>Dictionary</h2>
-      <div id="wordList"></div>
-    </div>
-
-    <div class="translator">
-      <h2>Translator</h2>
-      <input id="translateInput" placeholder="Enter word">
-      <button onclick="translateWord()">Translate</button>
-      <p id="translationResult"></p>
-    </div>
+  <div id="lockSection">
+    <button id="toggleLock">🔒</button>
+    <input type="password" id="editPassword" placeholder="Enter key" style="display:none;" />
   </div>
+  <h1 id="title">Draconic Conlang Dictionary & Translator</h1>
+
+  <section>
+    <h2>Translator</h2>
+    <label for="translateWord">Word to Translate:</label>
+    <input type="text" id="translateWord" placeholder="Type a word" />
+    <label>
+      <input type="radio" name="direction" value="conlangToEnglish" checked />
+      Conlang → English
+    </label>
+    <label>
+      <input type="radio" name="direction" value="englishToConlang" />
+      English → Conlang
+    </label>
+    <button onclick="translateWord()">Translate</button>
+    <p id="translationResult"></p>
+  </section>
+
+  <section id="editSection" style="display:none;">
+    <h2>Add a Word</h2>
+    <input id="conlangWord" placeholder="Conlang Word">
+    <input id="englishWord" placeholder="English Translation">
+    <select id="categories" multiple>
+      <option>Pronouns</option>
+      <option>Verbs</option>
+      <option>Adjectives</option>
+      <option>Adverbs</option>
+      <option>Conjunctions</option>
+      <option>Prepositions / Locatives</option>
+      <option>Interrogatives</option>
+      <option>Demonstratives</option>
+      <option>Negation Words</option>
+      <option>Quantifiers</option>
+      <option>People & Kinship</option>
+      <option>Body & Senses</option>
+      <option>Weapons & Tools</option>
+      <option>Magic & Power</option>
+      <option>Emotion & Spirit</option>
+      <option>Terrain</option>
+      <option>Weather</option>
+      <option>Water</option>
+      <option>Animals & Creatures</option>
+      <option>Food & Drink</option>
+      <option>Time</option>
+      <option>Numbers</option>
+      <option>Places</option>
+      <option>Abstract Concepts</option>
+      <option>Conversation Phrases</option>
+      <option>Mythology / Religion</option>
+      <option>Combat Terminology</option>
+      <option>Crafting / Smithing</option>
+      <option>Titles & Ranks</option>
+      <option>Technology</option>
+    </select>
+    <button onclick="addWord()">Add Word</button>
+  </section>
+
+  <section>
+    <h2>Dictionary</h2>
+    <div id="wordList"></div>
+  </section>
+
   <script type="module" src="app.js"></script>
 </body>
 </html>
