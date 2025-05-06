@@ -24,6 +24,10 @@
       display: block;
       margin-top: 10px;
     }
+     #categories option:checked {
+    background-color: #ff3c00;
+    color: #000;
+  }
     input, select, button {
       padding: 8px;
       margin-top: 5px;
@@ -111,7 +115,7 @@
   <div id="editSection" style="display:none;">
     <h2>Add New Word</h2>
     <label for="categories">Categories:</label>
-    <select id="categories" multiple>
+    <select id="categories" multiple size=15>
       <option>Pronouns</option>
       <option>Verbs</option>
       <option>Adjectives</option>
