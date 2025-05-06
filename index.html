@@ -234,20 +234,27 @@
       if (pw === PASSWORD) db.ref("words/" + id).remove();
     }
 
-    function translateWord() {
-      const input = document.getElementById("translateInput").value.trim().toLowerCase();
-      db.ref("words").once("value", (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
-        let result = "Not found.";
-        Object.values(data).forEach(w => {
-          if (w.conlang.toLowerCase() === input || w.english.toLowerCase() === input) {
-            result = `${w.conlang} = ${w.english}`;
-          }
-        });
-        document.getElementById("translationResult").innerText = result;
-      });
+   function translateWord() {
+  const input = document.getElementById("translateInput").value.trim().toLowerCase();
+  db.ref("words").once("value", (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+
+    let results = []; // Array to hold all matching results
+
+    Object.values(data).forEach(w => {
+      if (w.conlang.toLowerCase() === input || w.english.toLowerCase() === input) {
+        results.push(`${w.conlang} = ${w.english}`);
+      }
+    });
+
+    if (results.length === 0) {
+      document.getElementById("translationResult").innerText = "Not found.";
+    } else {
+      document.getElementById("translationResult").innerText = results.join("\n");
     }
+  });
+}
 
     window.onload = loadWords;
   </script>
