@@ -157,12 +157,12 @@
   <h2>Word List</h2>
   <table>
     <thead>
-      <tr>
-        <th>Categories</th>
-        <th>Conlang Word</th>
-        <th>English Word</th>
-        <th>Action</th>
-      </tr>
+  <tr>
+    <th onclick="sortTable('categories')">Categories</th>
+    <th onclick="sortTable('conlang')">Conlang Word</th>
+    <th onclick="sortTable('english')">English Word</th>
+    <th>Action</th>
+  </tr>
     </thead>
     <tbody id="wordTableBody"></tbody>
   </table>
@@ -214,26 +214,68 @@
       document.getElementById("englishWord").value = "";
     }
 
-    function loadWords() {
-      db.ref("words").on("value", (snapshot) => {
-        const data = snapshot.val();
-        const tableBody = document.getElementById("wordTableBody");
-        tableBody.innerHTML = "";
-        if (!data) return;
-        const words = Object.entries(data).map(([id, val]) => ({ id, ...val }));
-        words.sort((a, b) => a.conlang.localeCompare(b.conlang));
-        for (const word of words) {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${word.categories.join(", ")}</td>
-            <td>${word.conlang}</td>
-            <td>${word.english}</td>
-            <td>${isUnlocked ? `<button onclick="deleteWord('${word.id}')">Delete</button>` : ''}</td>
-          `;
-          tableBody.appendChild(row);
-        }
-      });
+    let currentSort = 'conlang'; // default sort is by conlang word
+let currentSortOrder = 'asc'; // default sort order is ascending
+
+function sortTable(column) {
+  if (column === currentSort) {
+    // Toggle sort order if the same column is clicked
+    currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    // Set a new column to sort by
+    currentSort = column;
+    currentSortOrder = 'asc'; // default to ascending
+  }
+  loadWords();
+}
+
+function loadWords() {
+  db.ref("words").on("value", (snapshot) => {
+    const data = snapshot.val();
+    const tableBody = document.getElementById("wordTableBody");
+    tableBody.innerHTML = "";
+
+    if (!data) return;
+
+    const words = Object.entries(data).map(([id, val]) => ({ id, ...val }));
+
+    // Sort based on the current sort column and order
+    words.sort((a, b) => {
+      let aValue, bValue;
+      if (currentSort === 'conlang') {
+        aValue = a.conlang.toLowerCase();
+        bValue = b.conlang.toLowerCase();
+      } else if (currentSort === 'english') {
+        aValue = a.english.toLowerCase();
+        bValue = b.english.toLowerCase();
+      } else if (currentSort === 'categories') {
+        aValue = a.categories.join(', ').toLowerCase();
+        bValue = b.categories.join(', ').toLowerCase();
+      }
+
+      if (aValue < bValue) {
+        return currentSortOrder === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return currentSortOrder === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+
+    // Display the sorted words
+    for (const word of words) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${word.categories.join(", ")}</td>
+        <td style="font-family: 'UnifrakturCook', cursive;">${word.conlang}</td>
+        <td>${word.english}</td>
+        <td>${isUnlocked ? `<button onclick="deleteWord('${word.id}')">Delete</button>` : ''}</td>
+      `;
+      tableBody.appendChild(row);
     }
+  });
+}
+
 
     function deleteWord(id) {
       const pw = prompt("Enter password to delete:");
