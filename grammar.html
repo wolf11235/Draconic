@@ -3,250 +3,245 @@
 <head>
   <meta charset="UTF-8">
   <title>Draconic Grammar Guide</title>
+  <link rel="stylesheet" href="styles/style.css"> <!-- Optional external CSS -->
   <style>
     @font-face {
       font-family: 'Dungeon Depths';
       src: url('Fonts/DungeonDepths-owJWV.ttf') format('truetype');
     }
+
     body {
       background-color: #000;
       color: #ff3c00;
       font-family: 'Cinzel', serif;
-      margin: 0;
       padding: 40px 20px;
       line-height: 1.6;
     }
+
     h1 {
       font-family: 'Dungeon Depths', serif;
       font-size: 64px;
       text-align: center;
       margin-bottom: 10px;
     }
+
     h2 {
       font-size: 32px;
-      margin-top: 60px;
-      margin-bottom: 10px;
+      margin-top: 50px;
+      margin-bottom: 15px;
       border-bottom: 2px solid #ff3c00;
-      padding-bottom: 8px;
+      padding-bottom: 5px;
     }
+
     h3 {
       font-size: 24px;
       margin-top: 30px;
       margin-bottom: 10px;
     }
-    p, li {
+
+    p, li, td {
       color: #ccc;
       font-size: 18px;
     }
+
+    pre {
+      background-color: #111;
+      padding: 10px 15px;
+      color: #ffa07a;
+      border-left: 4px solid #ff3c00;
+      border-radius: 6px;
+      font-size: 16px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #111;
+      color: #ff3c00;
+    }
+
     a {
       color: #ff3c00;
       text-decoration: none;
     }
+
     a:hover {
       text-decoration: underline;
     }
-    ul {
-      padding-left: 20px;
-    }
-    pre {
-      background-color: #111;
-      color: #ffa07a;
-      padding: 12px 16px;
-      border-left: 4px solid #ff3c00;
+
+    .home-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff3c00;
+      color: #000;
+      padding: 10px 20px;
       border-radius: 6px;
-      overflow-x: auto;
+      font-weight: bold;
       font-size: 16px;
-      margin-bottom: 20px;
+      text-decoration: none;
+      transition: background-color 0.3s;
     }
-    .section {
-      margin-bottom: 60px;
+
+    .home-button:hover {
+      background-color: #ff2200;
     }
-    .toc {
-      background-color: #111;
-      padding: 20px;
-      border: 1px solid #ff3c00;
-      border-radius: 10px;
-      max-width: 600px;
-      margin: 40px auto;
-    }
-    .toc h2 {
-      font-size: 24px;
-      border: none;
-      margin-bottom: 10px;
-    }
-    .toc ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    .toc li {
-      margin: 8px 0;
-    }
+
     footer {
-      margin-top: 80px;
       text-align: center;
-      font-size: 14px;
       color: #666;
+      font-size: 14px;
+      margin-top: 80px;
     }
   </style>
 </head>
 <body>
 
+  <a href="index.html" class="home-button">Home</a>
+
   <h1>Draconic Grammar Guide</h1>
-  <p style="text-align:center; color:#ccc; font-size:20px;">Explore the ancient grammar of dragonkind — structured, powerful, and magical.</p>
 
-  <div class="toc">
-    <h2>Contents</h2>
-    <ul>
-      <li><a href="#phonology">1. Phonology (Sounds)</a></li>
-      <li><a href="#morphology">2. Morphology (Word Formation)</a></li>
-      <li><a href="#syntax">3. Syntax (Sentence Structure)</a></li>
-      <li><a href="#examples">4. Sentence Examples</a></li>
-      <li><a href="#possessive">5. Possessives & Plurals</a></li>
-      <li><a href="#tense">6. Tense & Aspect</a></li>
-      <li><a href="#building">7. Word Building</a></li>
-      <li><a href="#practice">8. Practice</a></li>
-      <li><a href="#crash">9. Crash Course</a></li>
-    </ul>
-  </div>
+  <h2>1. Phonology (Sound System)</h2>
+  <p>Draconic has a deep, guttural, and resonant sound palette. It uses simple but powerful sounds, favoring clarity and impact.</p>
 
-  <div class="section" id="phonology">
-    <h2>1. Phonology (Sounds)</h2>
-    <h3>Vowels</h3>
-    <pre>
-A: [ɑ] — "father"
-E: [ɛ] — "bed"
-I: [i] — "machine"
-O: [ɔ] — "stone"
-U: [u] — "moon"
-Y: [ɪ] — "rhythm"
-    </pre>
+  <h3>Vowels</h3>
+  <table>
+    <tr><th>Letter</th><th>Pronunciation</th><th>Example</th></tr>
+    <tr><td>A</td><td>[ɑ] – as in <i>father</i></td><td>Raak = Dragon</td></tr>
+    <tr><td>E</td><td>[ɛ] – as in <i>bed</i></td><td>Thukel = That</td></tr>
+    <tr><td>I</td><td>[i] – as in <i>machine</i></td><td>Mirrak = Child</td></tr>
+    <tr><td>O</td><td>[ɔ] – as in <i>stone</i></td><td>Zorak = Friend</td></tr>
+    <tr><td>U</td><td>[u] – as in <i>moon</i></td><td>Drumak = Meat</td></tr>
+    <tr><td>Y</td><td>[ɪ] – as in <i>rhythm</i></td><td>Zal’yrnn = Morning</td></tr>
+  </table>
 
-    <h3>Consonants</h3>
-    <pre>
-K, G, S, Z, R (rolled), TH, SH, V, M, L, N, CH, P, T, D
-    </pre>
+  <h3>Diphthongs</h3>
+  <table>
+    <tr><th>Letters</th><th>Pronunciation</th><th>Example</th></tr>
+    <tr><td>AI</td><td>[aɪ] – as in <i>high</i></td><td>—</td></tr>
+    <tr><td>EA</td><td>[ɛɪ] – as in <i>day</i></td><td>—</td></tr>
+    <tr><td>OI</td><td>[ɔɪ] – as in <i>boy</i></td><td>—</td></tr>
+    <tr><td>AU</td><td>[aʊ] – as in <i>out</i></td><td>—</td></tr>
+    <tr><td>OU</td><td>[oʊ] – as in <i>how</i></td><td>—</td></tr>
+  </table>
 
-    <h3>Diphthongs</h3>
-    <pre>
-AI - "high", EA - "day", OI - "boy", AU - "out", OU - "how"
-    </pre>
-  </div>
+  <h3>Consonants</h3>
+  <table>
+    <tr><th>Letter</th><th>Sound</th><th>Example</th></tr>
+    <tr><td>K</td><td>[k] – kite</td><td>Karnaz = Village</td></tr>
+    <tr><td>G</td><td>[g] – go</td><td>Graz = Speak</td></tr>
+    <tr><td>S</td><td>[s] – snake</td><td>Surn = Sun</td></tr>
+    <tr><td>Z</td><td>[z] – zebra</td><td>Zar = To be</td></tr>
+    <tr><td>R</td><td>[ʀ] – Rolled</td><td>Raak = Dragon</td></tr>
+    <tr><td>TH</td><td>[θ] – think</td><td>Thran = See</td></tr>
+    <tr><td>SH</td><td>[ʃ] – shush</td><td>Shaalth = Focus</td></tr>
+    <tr><td>V</td><td>[v] – vibe</td><td>Velth = Strong</td></tr>
+    <tr><td>M</td><td>[m] – moon</td><td>Marn = Eat</td></tr>
+    <tr><td>L</td><td>[l] – lunar</td><td>Lun = Moon</td></tr>
+    <tr><td>N</td><td>[n] – night</td><td>Nirrn = Night</td></tr>
+    <tr><td>CH</td><td>[ʧ] – chime</td><td>—</td></tr>
+    <tr><td>P</td><td>[p] – pipe</td><td>Penth = Five</td></tr>
+    <tr><td>T</td><td>[t] – tap</td><td>Thornak = Sword</td></tr>
+    <tr><td>D</td><td>[d] – dog</td><td>Dren = Drink</td></tr>
+  </table>
 
-  <div class="section" id="morphology">
-    <h2>2. Morphology (Word Formation)</h2>
-    <p>Draconic uses agglutination — combining multiple parts to form words with layered meaning.</p>
+  <h2>2. Morphology (Word Formation)</h2>
+  <p>Draconic is agglutinative, meaning words are built by combining smaller parts (morphemes) to express complex ideas.</p>
 
-    <h3>Prefixes</h3>
-    <pre>
-Raak- = "Dragon"
-Vura- = "Rune"
-Urth- = "Ancient"
-Dra- = "Power"
-Azgar- = "Magic/Strength"
-    </pre>
+  <h3>Common Morphological Elements</h3>
+  <p><strong>Prefixes:</strong> (meaning, ownership, power)</p>
+  <pre>
+Raak- = Dragon
+Vura- = Rune
+Urth- = Ancient
+Dra- = Power
+Azgar- = Magic or Strength
+  </pre>
 
-    <h3>Suffixes</h3>
-    <pre>
--haz = possessive
--voth = noun
--rath = verb
--kor = plural
-    </pre>
+  <p><strong>Suffixes:</strong> (function, tense, possession, plurality)</p>
+  <pre>
+-haz = Possessive → Raak’haz = Dragon’s
+-voth = Noun-forming → Azgar’voth = Power source
+-rath = Verb-forming → Rathor = To create
+-kor = Plural → Raak’kor = Dragons
+  </pre>
 
-    <h3>Infixes</h3>
-    <pre>
--th- = transformation / change
-    </pre>
-  </div>
+  <p><strong>Infixes:</strong> (modification)</p>
+  <pre>
+-th- = Change, past tense, transformation
+→ Vura-th-rath = To transform a rune
+  </pre>
 
-  <div class="section" id="syntax">
-    <h2>3. Syntax (Sentence Structure)</h2>
-    <p>Draconic generally follows a Subject-Object-Verb (SOV) structure.</p>
-    <pre>
-Raak’haz kalth’vak ir’raakh. — "The dragon breathes fire."
-Vura’kalth vrakkar azgar. — "The rune binds power."
-    </pre>
-  </div>
+  <h2>3. Syntax (Sentence Structure)</h2>
+  <p>Draconic follows Subject–Object–Verb (SOV) order.</p>
+  <pre>
+Raak’haz kalth’vak ir’raakh. → The dragon breathes fire.
+Vura’kalth vrakkar azgar. → The rune binds power.
+  </pre>
 
-  <div class="section" id="examples">
-    <h2>4. Sentence Examples</h2>
-    <pre>
-Vorn’az thran ez? — "We see you?"
-Vorn goth Karnaz. — "I'm going to the village."
-    </pre>
+  <h2>4. Sentence Construction Examples</h2>
+  <h3>Basic</h3>
+  <pre>
+Vorn’az thran ez? → Are we seeing you?
+Vorn goth Karnaz. → I'm going to the village.
+  </pre>
 
-    <h3>Questions</h3>
-    <pre>
-Vek? — "What?"
-Karn? — "Who?"
-Goth? — "Where?"
-Yrrn? — "When?"
-    </pre>
-  </div>
+  <h3>Questions</h3>
+  <pre>
+Vek? = What?
+Karn? = Who?
+Goth? = Where?
+Yrrn? = When?
+Thran? = How?
+  </pre>
 
-  <div class="section" id="possessive">
-    <h2>5. Possessives & Plurals</h2>
-    <pre>
-Raak’haz = "Dragon’s"
-Vura’kalth haz = "Rune’s flame"
-Raak-kor = "Dragons"
-Zaroth’kor = "Dooms"
-    </pre>
-  </div>
+  <h2>5. Possession & Plurality</h2>
+  <pre>
+Possessive: -haz → Raak’haz = Dragon’s
+            Vura’kalth’haz = The rune’s flame
 
-  <div class="section" id="tense">
-    <h2>6. Tense & Aspect</h2>
-    <pre>
--th- infix implies transformation or past
-Vura’kalth thran — "The rune saw"
-    </pre>
-  </div>
+Plural: -kor → Raak’kor = Dragons
+           Zorak’kor = Friends
+  </pre>
 
-  <div class="section" id="building">
-    <h2>7. Word Building</h2>
-    <pre>
-Raak’thor = "Dragon’s rune"
-Azgar’voth = "Power source"
-Raak’gor = "Dragon’s strength"
-Gor’velth = "Big strength"
-    </pre>
-  </div>
+  <h2>6. Tense & Aspect</h2>
+  <p>Draconic has minimal verb conjugation. Time is often implied through context or infix use.</p>
+  <pre>
+-th- infix indicates past or change:
 
-  <div class="section" id="practice">
-    <h2>8. Practice</h2>
-    <pre>
-Ez goth Zal’nirrn. — "You go evening."
-Vorn velth, zorak. — "I'm strong, friend."
-    </pre>
-  </div>
+Thran = Sees
+Th-thran = Saw
 
-  <div class="section" id="crash">
-    <h2>9. Crash Course: Speaking Draconic</h2>
+Example:
+Vura’kalth thran. → The rune saw / was seen.
+  </pre>
 
-    <h3>Pronunciation</h3>
-    <pre>
-A = ah | E = eh | I = ee | O = oh | U = oo
-R = rolled | ' = glottal stop | Double consonants = stressed
-    </pre>
+  <h2>7. Word Building (Compounds & Combinations)</h2>
+  <pre>
+Raak’thor = Dragon’s rune
+Azgar’voth = Power source
+Raak’gor = Dragon’s strength
+Gor’velth = Great strength
+  </pre>
 
-    <h3>Basic Sentences</h3>
-    <pre>
-Vorn zar veth. — I am good.
-Ez vek marnak. — You want food.
-Izz thran zal’nirrn. — They see evening.
-    </pre>
-
-    <h3>Useful Phrases</h3>
-    <pre>
-Veth’ra — Hello
-Vek’ra thrak? — What is that?
-Ez velth? — Are you strong?
-Vorn vek raruoki. — I want music.
-Zaroth’ra — Goodbye
-    </pre>
-  </div>
+  <h2>8. Practice Sentences (with Gloss)</h2>
+  <pre>
+Ez goth Zal’nirrn. → You go evening. (You are going in the evening.)
+Vorn velth, zorak. → I’m strong, friend.
+  </pre>
 
   <footer>&copy; 2025 Azzun — All Rights Reserved</footer>
-
 </body>
 </html>
