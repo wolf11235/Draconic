@@ -30,18 +30,6 @@
       padding: 20px;
       position: relative;
     }
-    <button onclick="window.location.href='index.html'" style="
-  padding: 10px 20px;
-  background-color: #ff3c00;
-  color: #000;
-  border: none;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-">
-  ← Back to Home
-    </button>
     h1, h2 {
       font-family: 'Dungeon Depths';
       color: #ff3c00;
@@ -125,6 +113,18 @@
   </style>
 </head>
 <body>
+  <button onclick="window.location.href='index.html'" style="
+  padding: 10px 20px;
+  background-color: #ff3c00;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+">
+  ← Back to Home
+    </button>
   <button id="lockButton" onclick="toggleKeyEntry()"><i class="fas fa-lock"></i></button>
   <div id="keyEntry">
     <input type="password" id="editPassword" placeholder="Enter key">
