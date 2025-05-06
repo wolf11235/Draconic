@@ -188,15 +188,17 @@
     }
 
     function unlockEdit() {
-      const key = document.getElementById('editPassword').value;
-      if (key === PASSWORD) {
-        isUnlocked = true;
-        document.getElementById('editSection').style.display = 'block';
-        document.getElementById('keyEntry').style.display = 'none';
-      } else {
-        alert('Incorrect password.');
-      }
-    }
+  const key = document.getElementById('editPassword').value;
+  if (key === PASSWORD) {
+    isUnlocked = true;
+    document.getElementById('editSection').style.display = 'block';
+    document.getElementById('keyEntry').style.display = 'none';
+    loadWords(); // Reload word list so delete buttons appear
+  } else {
+    alert('Incorrect password.');
+  }
+}
+
 
     function addWord() {
       const word = document.getElementById('conlangWord').value.trim();
