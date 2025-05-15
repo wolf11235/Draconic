@@ -325,25 +325,39 @@ function loadWords() {
 
    function translateWord() {
   const input = document.getElementById("translateInput").value.trim().toLowerCase();
+  const normalizedInput = normalizeInput(input);
+
   db.ref("words").once("value", (snapshot) => {
     const data = snapshot.val();
     if (!data) return;
 
-    let results = []; // Array to hold all matching results
+    let results = [];
 
     Object.values(data).forEach(w => {
-      if (w.conlang.toLowerCase() === input || w.english.toLowerCase() === input) {
+      const englishNormalized = normalizeInput(w.english);
+      const conlangNormalized = w.conlang.toLowerCase();
+
+      if (
+        englishNormalized.includes(normalizedInput) ||
+        normalizedInput.includes(englishNormalized) ||
+        conlangNormalized === normalizedInput
+      ) {
         results.push(`${w.conlang} = ${w.english}`);
       }
     });
 
-    if (results.length === 0) {
-      document.getElementById("translationResult").innerText = "Not found.";
-    } else {
-      document.getElementById("translationResult").innerText = results.join("\n");
-    }
+    const resultBox = document.getElementById("translationResult");
+    resultBox.innerText = results.length > 0 ? results.join("\n") : "Not found.";
   });
 }
+
+function normalizeInput(word) {
+  return word
+    .toLowerCase()
+    .replace(/^to\s+/, "") // remove "to " from beginning
+    .replace(/(ing|ed|s)$/, ""); // basic suffix stripping
+}
+
 
     window.onload = loadWords;
   </script>
