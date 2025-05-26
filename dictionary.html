@@ -135,7 +135,13 @@
   <button class="home-button" onclick="window.location.href='index.html'">
     ← Home
   </button>
-
+<div id="loginSection">
+  <h2>Login</h2>
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Log In</button>
+  <p id="loginMessage" style="color: red;"></p>
+</div>
   <!-- Lock Button -->
   <button id="lockButton" onclick="toggleKeyEntry()"><i class="fas fa-lock"></i></button>
 
@@ -209,6 +215,7 @@
   </table>
 
   <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script>
@@ -231,6 +238,35 @@
       const entry = document.getElementById('keyEntry');
       entry.style.display = entry.style.display === 'block' ? 'none' : 'block';
     }
+const auth = firebase.auth();
+
+function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById("loginMessage").textContent = "Logged in!";
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("editSection").style.display = "block";
+    })
+    .catch((error) => {
+      document.getElementById("loginMessage").textContent = error.message;
+    });
+}
+
+// Listen for auth state changes
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // User is signed in
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("editSection").style.display = "block";
+    loadWords(); // load words after login
+  } else {
+    // No user signed in
+    document.getElementById("loginSection").style.display = "block";
+    document.getElementById("editSection").style.display = "none";
+  }
+});
 
     function unlockEdit() {
   const key = document.getElementById('editPassword').value;
