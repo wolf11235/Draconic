@@ -254,10 +254,12 @@ let isUnlocked = false;
 
   auth.onAuthStateChanged(user => {
     if (user) {
+      isUnlocked = true;
       document.getElementById("loginSection").style.display = "none";
       document.getElementById("editSection").style.display = "block";
       loadWords();
     } else {
+      isUnlocked = false;
       document.getElementById("loginSection").style.display = "block";
       document.getElementById("editSection").style.display = "none";
     }
