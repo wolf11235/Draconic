@@ -216,57 +216,45 @@
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyC81DB6fOMtulZJc8FHXF0vqAc66ciTSPQ",
-      authDomain: "draconic-dictionarry.firebaseapp.com",
-      databaseURL: "https://draconic-dictionarry-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "draconic-dictionarry",
-      storageBucket: "draconic-dictionarry.appspot.com",
-      messagingSenderId: "182070316296",
-      appId: "1:182070316296:web:f872bd47ab2c1623e670bd"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-    const PASSWORD = "omega";
-    let isUnlocked = false;
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    // ... your config ...
+  };
 
-    function toggleKeyEntry() {
-      const entry = document.getElementById('keyEntry');
-      entry.style.display = entry.style.display === 'block' ? 'none' : 'block';
-    }
-const auth = firebase.auth();
+  // Initialize Firebase app and services AFTER scripts load
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const auth = firebase.auth();
 
-function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      document.getElementById("loginMessage").textContent = "Logged in!";
+  // Now define your login and other functions that use `auth` AFTER this
+  function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById("loginMessage").textContent = "Logged in!";
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("editSection").style.display = "block";
+      })
+      .catch((error) => {
+        document.getElementById("loginMessage").textContent = error.message;
+      });
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
       document.getElementById("loginSection").style.display = "none";
       document.getElementById("editSection").style.display = "block";
-    })
-    .catch((error) => {
-      document.getElementById("loginMessage").textContent = error.message;
-    });
-}
-
-// Listen for auth state changes
-auth.onAuthStateChanged(user => {
-  if (user) {
-    // User is signed in
-    document.getElementById("loginSection").style.display = "none";
-    document.getElementById("editSection").style.display = "block";
-    loadWords(); // load words after login
-  } else {
-    // No user signed in
-    document.getElementById("loginSection").style.display = "block";
-    document.getElementById("editSection").style.display = "none";
-  }
-});
+      loadWords();
+    } else {
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("editSection").style.display = "none";
+    }
+  });
 
     function unlockEdit() {
   const key = document.getElementById('editPassword').value;
