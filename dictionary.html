@@ -302,7 +302,7 @@ function sortTable(column) {
 }
 
 function loadWords() {
-  db.ref("words").once("value", (snapshot) => {
+  db.ref("words").on("value", (snapshot) => {
     const data = snapshot.val();
     const tableBody = document.getElementById("wordTableBody");
     tableBody.innerHTML = "";
@@ -333,20 +333,6 @@ function loadWords() {
       }
       return 0;
     });
-
-    // Display the sorted words
-    for (const word of words) {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${word.categories.join(", ")}</td>
-        <td style="font-family: 'UnifrakturCook', cursive;">${word.conlang}</td>
-        <td>${word.english}</td>
-        <td>${isUnlocked ? `<button onclick="deleteWord('${word.id}')">Delete</button>` : ''}</td>
-      `;
-      tableBody.appendChild(row);
-    }
-  });
-}
 
     // Display the sorted words
     for (const word of words) {
