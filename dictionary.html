@@ -235,7 +235,8 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
   const auth = firebase.auth();
-
+const PASSWORD = "omega";  // <-- Set your password here
+let isUnlocked = false;
   // Now define your login and other functions that use `auth` AFTER this
   function login() {
     const email = document.getElementById("email").value;
